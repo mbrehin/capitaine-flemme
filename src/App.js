@@ -3,20 +3,12 @@ import PropTypes from 'prop-types'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 
 import 'typeface-roboto'
 import { Typography } from '../node_modules/@material-ui/core'
-import SoundButton from './components/SoundButton'
+import Player from './components/Player'
 
 const styles = (theme) => ({
-  buttons: {
-    alignItems: 'center',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
   heroContent: {
     color: '#fff',
     margin: '0 auto',
@@ -62,16 +54,7 @@ const App = ({ classes }) => {
           Vous pouvez également utiliser votre clavier (AZERTYU / QSDFGH).
         </Typography>
       </div>
-      <div className={classes.buttons}>
-        <SoundButton labels={['ca', 'pi', 'taine']} />
-        <SoundButton labels={['flemme']} />
-        <SoundButton labels={['tu']} />
-        <SoundButton labels={['n’es']} />
-        <SoundButton labels={['pas']} />
-        <SoundButton labels={['de']} />
-        <SoundButton labels={['notre']} />
-        <SoundButton labels={['ga', 'la', 'xie']} />
-      </div>
+      <Player />
     </main>
   )
 }
