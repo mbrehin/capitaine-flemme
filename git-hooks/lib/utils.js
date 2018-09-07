@@ -25,7 +25,7 @@ function colorizedLogTitle(logLevel, hookTitle, text) {
   let coloredIcon
   if (logLevel === 'error') {
     coloredIcon = `${FG_RED}✖  ${hookTitle}\x1b[0m`
-  } else if (logLevel === 'error') {
+  } else if (logLevel === 'warning') {
     coloredIcon = `${FG_YELLOW}❗  ${hookTitle}\x1b[0m`
   } else {
     coloredIcon = `${FG_GREEN}✔  ${hookTitle}\x1b[0m`

@@ -19,11 +19,32 @@ const hookTitle = 'pre-push'
 const config = require('../package.json')
 
 // Commands
-const gitListStagedFiles = 'git diff @{u} --name-only --diff-filter=ACM'
+const gitCheckForUpstream = 'git rev-parse @{u}'
+const gitUpdatedFiles = 'git diff @{u} --name-only --diff-filter=ACM'
+const gitGetFirstNotPushedCommit = `git log HEAD --not --remotes --pretty=tformat:%h | tail -n 1`
+const gitUpdatedFilesNoUpstream = `git diff \`${gitGetFirstNotPushedCommit}\`^ --name-only --diff-filter=ACM`
 const jestCoverage = 'jest-coverage-ratchet && jest --bail --coverage'
 
 async function run() {
-  const { stdout } = await exec(gitListStagedFiles)
+  // If there is no existing upstream, we cannot run our diff using @{u},
+  // we must use a fallback command.
+  // We have to manage it with a `catch` due to error thrown:
+  // `fatal: no upstream configured for branch 'TARGET_BRANCH'`.
+  let command
+  try {
+    await largeOutputExec(gitCheckForUpstream)
+    command = gitUpdatedFiles
+  } catch (_) {
+    colorizedLogTitle(
+      'warning',
+      hookTitle,
+      'Cannot run pre-push checks: upstream is not configured yet!'
+    )
+    // Use fallback command instead
+    command = gitUpdatedFilesNoUpstream
+  }
+
+  const { stdout } = await largeOutputExec(command)
   // Manage files, remove empty lines from `git diff` result
   const files = stdout.split('\n').filter(Boolean)
 
