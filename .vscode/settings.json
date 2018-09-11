@@ -25,5 +25,18 @@
   "prettier.semi": false,
   "editor.formatOnSave": true,
   "javascript.format.enable": false,
-  "javascript.validate.enable": false
+  "javascript.validate.enable": false,
+
+  // TypeScript Hero (auto-imports & import sorting)
+  "typescriptHero.imports.disableImportRemovalOnOrganize": true,
+  "typescriptHero.imports.grouping": [
+    "Modules",
+    "/material-ui/",
+    "Plains",
+    "Workspace"
+  ],
+  "typescriptHero.imports.insertSemicolons": false,
+  "typescriptHero.imports.multiLineWrapThreshold": 80,
+  "typescriptHero.imports.organizeOnSave": true,
+  "typescriptHero.imports.organizeSortsByFirstSpecifier": true
 }
