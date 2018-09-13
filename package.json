@@ -104,9 +104,11 @@
     "semi": false
   },
   "dependencies": {
+    "@material-ui/core": "^3.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "next"
+    "react-scripts": "next",
+    "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.1.1",
