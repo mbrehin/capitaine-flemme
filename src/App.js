@@ -1,11 +1,12 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
+import { Typography } from '../node_modules/@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 
 import 'typeface-roboto'
-import { Typography } from '../node_modules/@material-ui/core'
+
 import Player from './components/Player'
 
 const styles = (theme) => ({

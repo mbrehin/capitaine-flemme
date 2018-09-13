@@ -1,7 +1,11 @@
-import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import Tone from 'tone'
+
 import { withStyles } from '../../node_modules/@material-ui/core'
-import SoundButton from './SoundButton'
+
+import { song } from '../utils/song'
+import SoundButton from './SoundButtonGroup'
 
 const styles = (theme) => ({
   buttons: {
@@ -13,19 +17,24 @@ const styles = (theme) => ({
 })
 
 class Player extends Component {
+  constructor(...args) {
+    super(...args)
+    // Create a synth and connect it to the master output (your speakers)
+    this.synth = new Tone.Synth().toMaster()
+  }
+
+  playTrack = ({ frequency, duration }) => {
+    this.synth.triggerAttackRelease(frequency, duration)
+  }
+
   render() {
     const { classes } = this.props
 
     return (
       <div className={classes.buttons}>
-        <SoundButton labels={['ca', 'pi', 'taine']} />
-        <SoundButton labels={['flemme']} />
-        <SoundButton labels={['tu']} />
-        <SoundButton labels={['n’es']} />
-        <SoundButton labels={['pas']} />
-        <SoundButton labels={['de']} />
-        <SoundButton labels={['notre']} />
-        <SoundButton labels={['ga', 'la', 'xie']} />
+        {song.map((sounds, index) => (
+          <SoundButton sounds={sounds} key={index} onClick={this.playTrack} />
+        ))}
       </div>
     )
   }
