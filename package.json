@@ -108,6 +108,7 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "next",
+    "tone": "^0.12.80",
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
