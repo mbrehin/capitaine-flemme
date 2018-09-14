@@ -253,17 +253,29 @@ Côté tests automatisés de l'accessibilité, on va utiliser [axe-core](https:/
 
 On aura besoin d'un serveur pour tout ça.
 
-`npm install --save-dev axe-core jest-puppeteer puppeteer serve babel-preset-env react-scripts@next`.
+`npm install --save-dev axe-core jest-puppeteer puppeteer serve react-scripts@next @babel/preset-env`.
 
-Notez la présence de `babel-preset-env` pour nous permettre d'utiliser les dernières syntaxes ES6, notamment `async/await`. On complète avec le fichier `accessibility/.babelrc` :
+Notez la présence de `@babel/preset-env` pour nous permettre d'utiliser les dernières syntaxes ES6, notamment les imports et `async/await`. On complète avec le fichier `accessibility/.babelrc` :
 
-```JS
+```JSON
 {
-  "presets": ["env"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "> 1%", "safari >= 10"],
+          "node": "current"
+        },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-react"
+  ]
 }
 ```
 
-On est également obligé de tricher pour utiliser la dernière version de *react-scripts* qui permettra de faire fonctionner tout ça.
+On est également obligé de tricher pour utiliser la dernière version de _react-scripts_ qui permettra de faire fonctionner tout ça.
 
 _Rq : selon le gouvernement anglais, l'automatisation des tests d'accessibilité ne permet de couvrir que 30% des problématiques. Soyez donc vigilants et allez au bout de vos démarches en ajoutant des tests via les technologies d'assistance (lecteurs d’écrans etc.) et incluez si possible des utilisateurs en situation de handicap pour des tests en situation._
 

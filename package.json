@@ -112,6 +112,7 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.0.0",
     "@commitlint/cli": "^7.1.1",
     "@commitlint/config-conventional": "^7.1.1",
     "@commitlint/prompt-cli": "^7.1.1",
