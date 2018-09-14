@@ -13,11 +13,12 @@ const styles = (theme) => ({
 const SoundButtonGroup = ({ classes, sounds, xs, onClick }) => {
   return (
     <span className={classes.button}>
-      {sounds.map(({ label, duration, frequency }) => (
+      {sounds.map(({ label, duration, frequency, key }) => (
         <Button
           variant="contained"
           key={`${label}-${frequency}`}
           onClick={() => onClick({ frequency, duration })}
+          title={`Touche « ${key} »`}
         >
           {label}
         </Button>

@@ -52,7 +52,7 @@ const App = ({ classes }) => {
         <Typography align="center" color="textSecondary" component="p">
           Chaque bouton désigne une note de la chanson.
           <br />
-          Vous pouvez également utiliser votre clavier (AZERTYU / QSDFGH).
+          Vous pouvez également utiliser votre clavier (AZERTYUIOPQSD).
         </Typography>
       </div>
       <Player />
