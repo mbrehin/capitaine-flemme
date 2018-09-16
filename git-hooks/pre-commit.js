@@ -84,7 +84,10 @@ function parseContents({
 
   for (const { content, fileName } of stagedContents) {
     // Skip file if it does not match filter (and skip self)
-    if (!filter || !filter.test(content)) {
+    if (filter && !filter.test(fileName)) {
+      continue
+    }
+    if (!regex.test(content)) {
       continue
     }
 
@@ -95,8 +98,8 @@ function parseContents({
     container[message].push(fileName)
   }
 
-  printErrors('warn', warnings)
-  if (printErrors('error', errors)) {
+  printErrors('warn', warnings, hookTitle)
+  if (printErrors('error', errors, hookTitle)) {
     process.exit(1)
   }
 }

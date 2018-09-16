@@ -12,7 +12,7 @@ const FG_YELLOW = '\x1b[33m'
 // - standard: green
 function colorizedLog(logLevel, text) {
   // Colors code won’t be used if not in TTY
-  if (!process.stderr.isTTY() && !process.stdout.isTTY()) {
+  if (!process.stderr.isTTY && !process.stdout.isTTY) {
     console.log(text)
     return
   }
@@ -52,7 +52,7 @@ function logAndExitWithTitle(err, hookTitle) {
 // File1
 // File2
 // ```
-function printErrors(severity, errors) {
+function printErrors(severity, errors, hookTitle) {
   const entries = Object.entries(errors)
   if (entries.length === 0) {
     return false
@@ -62,7 +62,7 @@ function printErrors(severity, errors) {
     severity === 'error'
       ? 'oops, something’s wrong!  😱\n'
       : 'there may be something to improve or correct!\n'
-  colorizedLogTitle(severity, title)
+  colorizedLogTitle(severity, hookTitle, title)
 
   for (const [message, fileNames] of entries) {
     const title = `=== ${message} ===`
