@@ -1,6 +1,7 @@
 {
   "name": "capitaine-flemme",
   "description": "Démonstration de l'automatisation des process de développement dans un projet web",
+  "homepage": "https://mbrehin.github.io/capitaine-flemme",
   "version": "0.1.0",
   "engines": {
     "node": "10",
@@ -17,7 +18,9 @@
     "test:accessibility": "JEST_PUPPETEER_CONFIG=./accessibility/jest-puppeteer.config.js jest --runInBand --verbose --colors --config ./accessibility/jest.config.json",
     "test:cov": "npm test -- --coverage",
     "test:watch": "npm test -- --watch",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "commitlint": {
     "extends": [
@@ -131,6 +134,7 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
+    "gh-pages": "^2.0.0",
     "husky": "^1.0.0-rc.13",
     "jest-coverage-ratchet": "^0.2.3",
     "jest-puppeteer": "^3.3.1",
