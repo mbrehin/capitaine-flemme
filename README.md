@@ -137,7 +137,7 @@ On précise dans la configuration (`package.json`) qu'on veut utiliser le *conve
 
 Ensuite on veut s'assurer que les messages saisis répondent bien aux critères du conventional-changelog (dans le cas des saisies manuelles). On utilise _commit-lint_ à cet effet :
 
-`npm install --save-dev @commitlint/cli @commitlint/config-conventional @commitlint/prompt-cli`
+`npm install --save-dev @commitlint/cli @commitlint/config-conventional`
 
 On doit également préciser dans le `package.json` qu'on utilise le *conventional-changelog* :
 
@@ -148,6 +148,8 @@ On doit également préciser dans le `package.json` qu'on utilise le *convention
     ]
   },
 ```
+
+NB: Une alternative à `git commitizen` est également proposée : `@commitlint/prompt-cli`.
 
 Attention, _commit-lint_ n'est pas lancé automatiquement au moment de notre saisie, il faut compléter son chargement via l'utilitaire de hooks Git : _Husky_.
 
@@ -263,7 +265,7 @@ Notez la présence de `babel-preset-env` pour nous permettre d'utiliser les dern
 }
 ```
 
-On est également obligé de tricher pour utiliser la dernière version de *react-scripts* qui permettra de faire fonctionner tout ça.
+On est également obligé de tricher pour utiliser la dernière version de _react-scripts_ qui permettra de faire fonctionner tout ça.
 
 _Rq : selon le gouvernement anglais, l'automatisation des tests d'accessibilité ne permet de couvrir que 30% des problématiques. Soyez donc vigilants et allez au bout de vos démarches en ajoutant des tests via les technologies d'assistance (lecteurs d’écrans etc.) et incluez si possible des utilisateurs en situation de handicap pour des tests en situation._
 
