@@ -271,7 +271,7 @@ _Rq : selon le gouvernement anglais, l'automatisation des tests d'accessibilit�
 
 ## Mise en place de l'Auto DevOps de GitLab
 
-Dans notre projet GitLab fraichement créé nous devons activer l'[auto DevOps](https://docs.gitlab.com/ee/user/project/clusters/). Comme tout ceci est encore à ses premisses il nous faut gérer quelques détails parfois mal documentés :
+Dans notre projet GitLab fraichement créé nous devons activer l'[auto DevOps](https://about.gitlab.com/auto-devops/). Comme tout ceci est encore à ses premisses il nous faut gérer quelques détails parfois mal documentés :
 
 ### Cluster Kubernetes
 
@@ -284,3 +284,54 @@ Pour ne pas se galérer dans l'immédiat avec un domaine custom, on va passer pa
 ### Et ensuite ?
 
 Là ça commence à devenir plaisant. Si on créé une pull request on, GitLab va automatiquement déclencher tout un tas de choses avec sa pipeline après avoir fait de l'auto-détection de stack technique.
+
+## Autres ressources utiles
+
+### VSCode
+
+Site officiel : https://code.visualstudio.com
+
+Astuces et plugins par Delicious-Insights : https://installations.delicious-insights.com/software/vscode.html
+
+### Lint
+
+Article intéressant sur ESLint : https://dev.to/lauragift21/quick-guide-to-linting-javascript-codebase-with-eslint-dcf
+
+Pour linter les fichiers *stagés* :
+
+- https://github.com/nrwl/precise-commits : précis, efficace
+- https://github.com/okonet/lint-staged : limité lors de l’utilisation de `git add -p`
+
+### Formatage
+
+https://prettier.io/ : pour le JS/TS, CSS, Less, Scss, Vue, JSON, GraphQL, Markdown, JSX, Flow, et d'autres à venir…
+
+### Accessibilité
+
+Outil de test auto pour l'accessibilité (gérera uniquement les défauts communs en auto, ne remplacera pas des tests d'interface).
+
+https://github.com/nickcolley/jest-axe
+
+Automatisation des tests d'accessibilité :
+
+- https://marmelab.com/blog/2018/02/22/accessibililty-testing-e2e.html
+- https://marmelab.com/blog/2018/07/18/accessibility-performance-testing-puppeteer.html
+
+### Les hooks git
+
+- La doc officielle : https://git-scm.com/book/fr/v1/Personnalisation-de-Git-Crochets-Git
+- Hooks multi-languages : https://pre-commit.com/
+- Un article à nous sur le sujet (avec un beau schéma pour mieux comprendre) : https://delicious-insights.com/fr/articles/git-hooks/
+
+### Changelog
+
+Automatiser la génération du changelog :
+
+- Normalisation des messages de commits : https://conventionalcommits.org/
+- Normalisation des versions : https://semver.org/
+
+En vrac :
+
+- https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli
+- https://github.com/conventional-changelog/standard-version
+- https://github.com/semantic-release/semantic-release
