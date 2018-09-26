@@ -53,8 +53,23 @@ async function run() {
   const files = stdout.split('\n').filter(Boolean)
   // Cache staged contents (prevent multiple `git show :0:<file>` call)
   const stagedContents = await readStagedContents(files)
+  // Initialize errors and warning as empty arrays
+  const groupedErrors = {}
+  const groupedwarnings = {}
+
   for (const pattern of patterns) {
-    parseContents({ pattern, stagedContents })
+    const { errors, warnings } = parseContents({ pattern, stagedContents })
+    if (errors.length) {
+      groupedErrors[pattern.message] = errors
+    }
+    if (warnings.length) {
+      groupedwarnings[pattern.message] = warnings
+    }
+  }
+
+  printErrors('warn', groupedwarnings, hookTitle)
+  if (printErrors('error', groupedErrors, hookTitle)) {
+    process.exit(1)
   }
   colorizedLogTitle('success', hookTitle, 'everything went fine! Good job! 👏')
 }
@@ -74,13 +89,13 @@ function readStagedContents(files) {
 }
 
 // Read staged files content and check if any pattern is matched.
-// If so, then print error message and exit process when all files are processed.
+// If so, then list filenames for error and/or warnings.
 function parseContents({
-  pattern: { filter, message, nonBlocking, regex },
+  pattern: { filter, nonBlocking, regex },
   stagedContents,
 }) {
-  const errors = {}
-  const warnings = {}
+  const errors = []
+  const warnings = []
 
   for (const { content, fileName } of stagedContents) {
     // Skip file if it does not match filter (and skip self)
@@ -92,16 +107,10 @@ function parseContents({
     }
 
     const container = nonBlocking ? warnings : errors
-    if (!container[message]) {
-      container[message] = []
-    }
-    container[message].push(fileName)
+    container.push(fileName)
   }
 
-  printErrors('warn', warnings, hookTitle)
-  if (printErrors('error', errors, hookTitle)) {
-    process.exit(1)
-  }
+  return { errors, warnings }
 }
 
 // Wrap generic function inside custom function that loads current hook title
