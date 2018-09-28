@@ -16,8 +16,13 @@ const {
 const exec = (command) => largeOutputExec(command).catch(logAndExit)
 
 // Git commands
-const gitDiff = 'git diff --staged --name-only --diff-filter=ACM'
-const gitShowStaged = (file) => `git show :0:${file}`
+const gitDiffBase = 'git diff --staged --diff-filter=ACM'
+// List added or updated file names only
+const gitDiff = `${gitDiffBase} --name-only`
+// We don't use `git show :0:${file}` because we only want to
+// process created or updated raws.
+const gitShowStaged = (file) =>
+  `${gitDiffBase} --unified=0 ${file} | grep "^+[^+]" | sed -E "s/^\\+\\s*//"`
 
 const hookTitle = 'pre-commit'
 
