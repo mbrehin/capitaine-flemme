@@ -199,9 +199,8 @@ Dans le `package.json` :
 ### Husky
 
 Husky permet de gérer les hooks Git depuis le `package.json`.
-On installe a minima la version 1.x (d'où le `@next` qui suit car actuellement release candidate `1.0.0-rc.13`) :
 
-`npm install --save-dev husky@next`
+`npm install --save-dev husky`
 
 On le configure alors pour lancer nos scripts de hooks ainsi que _commit-lint_ et _precise-commit_ (`package.json`) :
 

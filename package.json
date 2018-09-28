@@ -131,7 +131,7 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
-    "husky": "^1.0.0-rc.13",
+    "husky": "^1.0.1",
     "jest-coverage-ratchet": "^0.2.3",
     "jest-puppeteer": "^3.3.1",
     "precise-commits": "^1.0.2",
