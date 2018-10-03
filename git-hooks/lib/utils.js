@@ -61,7 +61,7 @@ function printErrors(severity, errors, hookTitle) {
   const title =
     severity === 'error'
       ? 'oops, something’s wrong!  😱\n'
-      : 'there may be something to improve or correct!\n'
+      : 'there may be something to improve or fix!\n'
   colorizedLogTitle(severity, hookTitle, title)
 
   for (const [message, fileNames] of entries) {
