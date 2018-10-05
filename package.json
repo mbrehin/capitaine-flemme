@@ -82,7 +82,14 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-push": "./git-hooks/pre-push.js",
-      "pre-commit": "./git-hooks/pre-commit/check-staged-contents.js && precise-commits"
+      "pre-commit": "./git-hooks/pre-commit/check-staged-contents.js && ./git-hooks/pre-commit/optimize-svg.js && precise-commits"
+    }
+  },
+  "svgo": {
+    "plugins": {
+      "presets": [
+        "pre-commit"
+      ]
     }
   },
   "jest": {
@@ -138,7 +145,8 @@
     "prettier": "^1.14.2",
     "puppeteer": "^1.7.0",
     "react-test-renderer": "^16.5.0",
-    "serve": "^10.0.0"
+    "serve": "^10.0.0",
+    "svgo": "^1.1.1"
   },
   "browserslist": {
     "development": [
