@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 const {
   colorizedLogTitle,
-  largeOutputExec,
-  logAndExitWithTitle,
+  getStagedFiles,
+  getStagedContents,
   printErrors,
-} = require('./lib/utils')
+} = require('../utils')
 
 // Parse staged files and look for custom patterns.
 // If a searched pattern is found, then print an associated message.
@@ -13,18 +13,7 @@ const {
 // For non blocking patterns, errors will be logged as warnings
 // but won't stop commit.
 
-const exec = (command) => largeOutputExec(command).catch(logAndExit)
-
-// Git commands
-const gitDiffBase = 'git diff --staged --diff-filter=ACM'
-// List added or updated file names only
-const gitDiff = `${gitDiffBase} --name-only`
-// We don't use `git show :0:${file}` because we only want to
-// process created or updated raws.
-const gitShowStaged = (file) =>
-  `${gitDiffBase} --unified=0 ${file} | grep "^+[^+]" | sed -E "s/^\\+\\s*//"`
-
-const hookTitle = 'pre-commit'
+const hookTitle = 'contents checks'
 
 // Patterns (regexps) to search inside new changes.
 // Associated messages will be printed when pattern
@@ -53,11 +42,9 @@ const patterns = [
 // Run `diff --staged` only once per file and cache results
 // for later use, then run patterns search.
 async function run() {
-  const { stdout } = await exec(gitDiff)
-  // Manage files, remove empty lines from `git diff` result
-  const files = stdout.split('\n').filter(Boolean)
+  const files = await getStagedFiles()
   // Cache staged contents (prevent multiple `git show :0:<file>` call)
-  const stagedContents = await readStagedContents(files)
+  const stagedContents = await getStagedContents(files)
   // Initialize errors and warning as empty arrays
   const groupedErrors = {}
   const groupedwarnings = {}
@@ -77,20 +64,6 @@ async function run() {
     process.exit(1)
   }
   colorizedLogTitle('success', hookTitle, 'everything went fine! Good job! 👏')
-}
-
-// Read one staged file content
-async function readStagedContent(file) {
-  const { stdout } = await exec(gitShowStaged(file))
-  return { fileName: file, content: stdout }
-}
-
-// Load staged contents for later parsing.
-// This won't load `pre-commit` files contents.
-function readStagedContents(files) {
-  return Promise.all(
-    files.filter((file) => !/pre-commit$/.test(file)).map(readStagedContent)
-  )
 }
 
 // Read staged files content and check if any pattern is matched.
@@ -116,11 +89,6 @@ function parseContents({
   }
 
   return { errors, warnings }
-}
-
-// Wrap generic function inside custom function that loads current hook title
-function logAndExit(err) {
-  logAndExitWithTitle(err, hookTitle)
 }
 
 run()

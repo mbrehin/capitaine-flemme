@@ -8,12 +8,10 @@ const minimatch = require('minimatch')
 
 const {
   colorizedLogTitle,
+  exec,
   largeOutputExec,
   logAndExitWithTitle,
-} = require('./lib/utils')
-
-const exec = (command, options = {}) =>
-  largeOutputExec(command, options).catch(logAndExit)
+} = require('./utils')
 
 const hookTitle = 'pre-push'
 const config = require('../package.json')
@@ -57,7 +55,7 @@ async function run() {
     // If there is any staged file matching jest coverage config,
     // then run coverage stats update and check for coverage regression
     if (filesMatch.length > 0) {
-      await exec(jestCoverage, { cwd: './' })
+      await exec(jestCoverage, hookTitle, { cwd: './' })
       colorizedLogTitle(
         'success',
         hookTitle,
@@ -65,11 +63,6 @@ async function run() {
       )
     }
   }
-}
-
-// Wrap generic function inside custom function that loads current hook title
-function logAndExit(err) {
-  logAndExitWithTitle(err, hookTitle)
 }
 
 run()

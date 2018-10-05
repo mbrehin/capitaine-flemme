@@ -6,6 +6,15 @@ const FG_GREEN = '\x1b[32m'
 const FG_RED = '\x1b[31m'
 const FG_YELLOW = '\x1b[33m'
 
+// Git commands
+const gitDiffBase = 'git diff --staged --diff-filter=ACM'
+// List added or updated file names only
+const gitStagedFiles = `${gitDiffBase} --name-only`
+// We don't use `git show :0:${file}` because we only want to
+// process created or updated raws.
+const gitShowStaged = (file) =>
+  `${gitDiffBase} --unified=0 ${file} | grep "^+[^+]" | sed -E "s/^\\+\\s*//"`
+
 // Print error with color depending on given severity.
 // - error: red
 // - warning: yellow
@@ -33,6 +42,7 @@ function colorizedLogTitle(logLevel, hookTitle, text) {
   console.log(`${coloredIcon}: ${text}`)
 }
 
+// Because we need more than default output…
 function largeOutputExec(command, options = {}) {
   return nodeExec(command, { maxBuffer: 1024 * 1024, ...options })
 }
@@ -42,6 +52,34 @@ function logAndExitWithTitle(err, hookTitle) {
   colorizedLogTitle('error', hookTitle, `Couldn’t run 'exec' command: ${err}`)
   // EX_DATAERR (65): The input data was incorrect in some way
   process.exit(65)
+}
+
+// Wrap large output exec with automatic log on error
+function exec(command, hookTitle, options = {}) {
+  return largeOutputExec(command).catch((err) =>
+    logAndExitWithTitle(err, hookTitle)
+  )
+}
+
+// Get files names that are staged
+async function getStagedFiles(hookTitle) {
+  const { stdout } = await exec(gitStagedFiles, hookTitle)
+  // Manage files, remove empty lines from `git diff` result
+  return stdout.split('\n').filter(Boolean)
+}
+
+// Read one staged file content
+async function getStagedContent(file, hookTitle) {
+  const { stdout } = await exec(gitShowStaged(file), hookTitle)
+  return { fileName: file, content: stdout }
+}
+
+// Load staged contents for later parsing.
+// This won't load `pre-commit` files contents.
+function getStagedContents(files) {
+  return Promise.all(
+    files.filter((file) => !/pre-commit$/.test(file)).map(getStagedContent)
+  )
 }
 
 // Loop over errors and print them.
@@ -75,6 +113,9 @@ function printErrors(severity, errors, hookTitle) {
 
 module.exports = {
   colorizedLogTitle,
+  exec,
+  getStagedFiles,
+  getStagedContents,
   largeOutputExec,
   logAndExitWithTitle,
   printErrors,

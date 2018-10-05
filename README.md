@@ -208,7 +208,7 @@ On le configure alors pour lancer nos scripts de hooks ainsi que _commit-lint_ e
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $GIT_PARAMS",
-      "pre-commit": "./git-hooks/pre-commit.js && precise-commits",
+      "pre-commit": "./git-hooks/pre-commit/check-staged-contents.js && ./git-hooks/pre-commit/optimize-svg.js && precise-commits",
       "pre-push": "./git-hooks/pre-push.js"
     }
   },
