@@ -1,6 +1,12 @@
 const util = require('util')
 const nodeExec = util.promisify(require('child_process').exec)
 
+// Configuration stuff
+const fs = require('fs')
+const path = require('path')
+const pathFromRoot = (target) => path.join(__dirname, '..', ...target)
+const packagePath = pathFromRoot(['package.json'])
+
 // Logs colors
 const FG_GREEN = '\x1b[32m'
 const FG_RED = '\x1b[31m'
@@ -82,6 +88,11 @@ function getStagedContents(files) {
   )
 }
 
+// Load configuration as JSON from package.json
+function loadPackageJSON() {
+  return JSON.parse(fs.readFileSync(packagePath, 'utf-8'))
+}
+
 // Loop over errors and print them.
 // Each errors group will be prefixed by its message, ie.:
 //
@@ -117,6 +128,8 @@ module.exports = {
   getStagedFiles,
   getStagedContents,
   largeOutputExec,
+  loadPackageJSON,
   logAndExitWithTitle,
+  pathFromRoot,
   printErrors,
 }

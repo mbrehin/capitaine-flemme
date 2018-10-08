@@ -1,7 +1,7 @@
 {
   "name": "capitaine-flemme",
   "description": "Démonstration de l'automatisation des process de développement dans un projet web",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "node": "10",
     "npm": "6"
@@ -84,6 +84,24 @@
       "pre-push": "./git-hooks/pre-push.js",
       "pre-commit": "./git-hooks/pre-commit/check-staged-contents.js && ./git-hooks/pre-commit/optimize-svg.js && precise-commits"
     }
+  },
+  "hooks": {
+    "pre-commit": [
+      {
+        "message": "You’ve got leftover conflict markers",
+        "regex": "/^[<>|=]{4,}/m"
+      },
+      {
+        "filter": "\\.js$",
+        "message": "You’ve got leftover `console.log`",
+        "regex": "console\\.log"
+      },
+      {
+        "message": "You have unfinished devs",
+        "nonBlocking": "true",
+        "regex": "(?:FIXME|TODO)"
+      }
+    ]
   },
   "svgo": {
     "plugins": {

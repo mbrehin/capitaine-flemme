@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-const fs = require('fs')
-const path = require('path')
-
-const { colorizedLogTitle, exec, getStagedFiles } = require('../utils')
+const {
+  colorizedLogTitle,
+  exec,
+  getStagedFiles,
+  loadPackageJSON,
+  pathFromRoot,
+} = require('../utils')
 
 const PRESETS = {
   'pre-commit': [
@@ -31,8 +34,6 @@ const PRESETS = {
 }
 const hookTitle = 'Optimizing SVGs'
 
-const pathFromRoot = (target) => path.join(__dirname, '..', '..', ...target)
-const packagePath = pathFromRoot(['package.json'])
 const svgoPath = pathFromRoot(['node_modules', '.bin', 'svgo'])
 
 // Loop over staged SVG files and apply optimization on them.
@@ -72,7 +73,7 @@ function loadConfFromPackage() {
     svgo: {
       plugins: { presets, enable, disable },
     },
-  } = JSON.parse(fs.readFileSync(packagePath, 'utf-8'))
+  } = loadPackageJSON()
   let plugins = []
 
   if (presets) {

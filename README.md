@@ -157,15 +157,63 @@ Attention, _commit-lint_ n'est pas lancé automatiquement au moment de notre sai
 
 On a un peut triché ici car on a directement injectés les fichiers dans un répertoire `git-hooks` à la racine du projet. Peut-être changerons-nous cela prochainement pour rendre ces compléments génériques et installables.
 
-NB : si vous souhaitez les réutiliser, notez que ces derniers doivent être exécutables (`chmod +x git-hooks/*.js`).
+NB : si vous souhaitez les réutiliser, notez que ces derniers doivent être exécutables (`chmod +x git-hooks/**/*.js`).
 
 #### Lors du commit
+
+##### Vérifications des contenus
 
 On veut effectuer tout un tas de vérifications sur les fichiers _stagés_/prêts à être commités :
 
 - Reste-t-il des marqueurs de conflits  ?
 - A-t-on laissé des mots clés `FIXME` ou `TODO` ?
 - A-t-on laissé des `console.log…` dans nos fichiers JS ?
+
+C'est le script `pre-commit/check-staged-contents.js` qui se charge de tout ça.
+
+Le chargement de la configuration se fait depuis le _package.json_ et est ainsi extensible :
+
+```JSON
+"hooks": {
+  "pre-commit": [
+    {
+      "filter": "\\.js$",
+      "nonBlocking": "true",
+      "message": "You’ve got leftover `console.log`",
+      "regex": "console\\.log"
+    },
+    …
+  ]
+}
+```
+
+Chaque entrée du tableau de "pre-commit" définit une règle d'analyse : un motif décrit par une expression régulière est recherché sur le contenu "stagé", et un message est affiché en cas de succès.
+
+Par défaut chaque règle est bloquante et interdira le commit si un motif est trouvé. Ceci peut être contourné en renseignant une clé `nonBlocking` à `true`.
+
+Un filtre peut également être appliquer sur le nom de fichier : `filter`.
+
+Seules les clés `message` et `regex` sont obligatoires.
+
+##### Optimisations
+
+Le script `pre-commit/optimize-svg.js` utilise [svgo](https://github.com/svg/svgo) pour optimiser les SVG au moment du commit.
+
+Ceci permet un premier jet de nettoyage. Par exemple on pourrait vouloir garder les commentaires en mode dév mais les purger plus tard, au build.
+
+Le chargement de la configuration se fait depuis le *package.json* :
+
+```JSON
+"svgo": {
+  "presets": ["pre-commit"],
+  "enable": ["removeDesc"],
+  "disable": ["cleanupAttrs"]
+}
+```
+
+Des presets peuvent être utilisés (pour l'instant uniquement `pre-commit`).
+
+D'autres configurations plus fines peuvent être utilisées indépendamment ou en compléments (chargées après les presets) grâce aux clés `enable` et `disable` liées aux options homonymes de la commande `svgo`.
 
 #### Lors du push
 
