@@ -302,13 +302,25 @@ Côté tests automatisés de l'accessibilité, on va utiliser [axe-core](https:/
 
 On aura besoin d'un serveur pour tout ça.
 
-`npm install --save-dev axe-core jest-puppeteer puppeteer serve babel-preset-env react-scripts@next`.
+`npm install --save-dev axe-core jest-puppeteer puppeteer serve react-scripts@next @babel/preset-env`.
 
-Notez la présence de `babel-preset-env` pour nous permettre d'utiliser les dernières syntaxes ES6, notamment `async/await`. On complète avec le fichier `accessibility/.babelrc` :
+Notez la présence de `@babel/preset-env` pour nous permettre d'utiliser les dernières syntaxes ES6, notamment les imports et `async/await`. On complète avec le fichier `accessibility/.babelrc` :
 
-```JS
+```JSON
 {
-  "presets": ["env"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "> 1%", "safari >= 10"],
+          "node": "current"
+        },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-react"
+  ]
 }
 ```
 

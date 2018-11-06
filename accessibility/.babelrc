@@ -1,3 +1,15 @@
 {
-  "presets": ["env"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "> 1%", "safari >= 10"],
+          "node": "current"
+        },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-react"
+  ]
 }
