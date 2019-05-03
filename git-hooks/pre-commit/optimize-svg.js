@@ -40,7 +40,7 @@ const svgoPath = pathFromRoot(['node_modules', '.bin', 'svgo'])
 async function run() {
   const files = await getStagedFiles()
   // Only keep SVG files
-  svgFiles = files.filter((fileName) => /\.svg$/.test(fileName)).join(' ')
+  const svgFiles = files.filter((fileName) => /\.svg$/.test(fileName)).join(' ')
 
   if (!svgFiles.length) {
     colorizedLogTitle('success', hookTitle, 'no SVG detected')
@@ -48,7 +48,7 @@ async function run() {
   }
 
   const { plugins } = loadConfFromPackage()
-  let pluginOpt
+  let pluginsOpt = ''
   if (plugins.length) {
     pluginsOpt = `--enable=${plugins.join(',')}`
   }

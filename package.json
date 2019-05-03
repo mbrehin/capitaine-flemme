@@ -85,19 +85,27 @@
       "pre-commit": "git-precommit-checks && ./git-hooks/pre-commit/optimize-svg.js && precise-commits"
     }
   },
-  "hooks": {
-    "pre-commit": [
-      {
-        "message": "You’ve got leftover conflict markers",
-        "regex": "/^[<>|=]{4,}/m"
-      },
+  "git-precommit-checks": {
+    "display": {
+      "notifications": true,
+      "offending-content": true,
+      "rules-summary": true,
+      "short-stats": true,
+      "verbose": false
+    },
+    "rules": [
       {
         "filter": "\\.js$",
-        "message": "You’ve got leftover `console.log`",
+        "nonBlocking": "true",
+        "message": "🤫 Oula, aurais-tu oublié des `console.log` inopportuns ?",
         "regex": "console\\.log"
       },
       {
-        "message": "You have unfinished devs",
+        "message": "😨 On dirait que tu as oublié des marqueurs de conflits",
+        "regex": "/^[<>|=]{4,}/m"
+      },
+      {
+        "message": "🤔 Aurais-tu oublié de finir des développement ?",
         "nonBlocking": "true",
         "regex": "(?:FIXME|TODO)"
       }
@@ -133,17 +141,17 @@
     "@material-ui/core": "^3.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "^2.1.3",
+    "react-scripts": "^3.0.0",
     "tone": "^0.12.80",
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.1.1",
+    "@commitlint/cli": "^7.5.2",
     "@commitlint/config-conventional": "^7.1.1",
-    "@commitlint/prompt-cli": "^7.1.1",
+    "@commitlint/prompt-cli": "^7.5.0",
     "axe-core": "^3.1.1",
     "babel-preset-env": "^1.7.0",
-    "commitizen": "^2.10.1",
+    "commitizen": "^3.1.1",
     "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
@@ -156,13 +164,13 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
-    "git-precommit-checks": "^1.2.0",
-    "husky": "^1.3.1",
+    "git-precommit-checks": "^2.3.0",
+    "husky": "^2.2.0",
     "jest-coverage-ratchet": "^0.2.3",
     "jest-puppeteer": "^3.3.1",
     "precise-commits": "^1.0.2",
     "prettier": "^1.14.2",
-    "puppeteer": "^1.7.0",
+    "puppeteer": "^1.15.0",
     "react-test-renderer": "^16.5.0",
     "serve": "^10.0.0",
     "svgo": "^1.1.1"

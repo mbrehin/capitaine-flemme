@@ -155,10 +155,6 @@ Attention, _commit-lint_ n'est pas lancé automatiquement au moment de notre sai
 
 ### Nos petits scripts à nous
 
-On a un peut triché ici car on a directement injectés les fichiers dans un répertoire `git-hooks` à la racine du projet. Peut-être changerons-nous cela prochainement pour rendre ces compléments génériques et installables.
-
-NB : si vous souhaitez les réutiliser, notez que ces derniers doivent être exécutables (`chmod +x git-hooks/**/*.js`).
-
 #### Lors du commit
 
 ##### Vérifications des contenus
@@ -169,25 +165,40 @@ On veut effectuer tout un tas de vérifications sur les fichiers _stagés_/prêt
 - A-t-on laissé des mots clés `FIXME` ou `TODO` ?
 - A-t-on laissé des `console.log…` dans nos fichiers JS ?
 
-C'est le script `pre-commit/check-staged-contents.js` qui se charge de tout ça.
+C'est le module npm `git-precommit-checks` qui se charge de tout ça.
 
-Le chargement de la configuration se fait depuis le _package.json_ et est ainsi extensible :
+Le chargement de la configuration se fait depuis le _package.json_ ce qui la rend extensible :
 
 ```JSON
-"hooks": {
-  "pre-commit": [
+"git-precommit-checks": {
+  "display": {
+    "notifications": true,
+    "offending-content": true,
+    "rules-summary": true,
+    "short-stats": true,
+    "verbose": false
+  },
+  "rules": [
     {
       "filter": "\\.js$",
       "nonBlocking": "true",
-      "message": "You’ve got leftover `console.log`",
+      "message": "🤫 Oula, aurais-tu oublié des `console.log` inopportuns ?",
       "regex": "console\\.log"
     },
-    …
+    {
+      "message": "😨 On dirait que tu as oublié des marqueurs de conflits",
+      "regex": "/^[<>|=]{4,}/m"
+    },
+    {
+      "message": "🤔 Aurais-tu oublié de finir des développement ?",
+      "nonBlocking": "true",
+      "regex": "(?:FIXME|TODO)"
+    }
   ]
 }
 ```
 
-Chaque entrée du tableau de "pre-commit" définit une règle d'analyse : un motif décrit par une expression régulière est recherché sur le contenu "stagé", et un message est affiché en cas de succès.
+Chaque entrée du tableau `rules` définit une règle d'analyse : un motif décrit par une expression régulière est recherché sur le contenu "stagé", et un message est affiché en cas de succès.
 
 Par défaut chaque règle est bloquante et interdira le commit si un motif est trouvé. Ceci peut être contourné en renseignant une clé `nonBlocking` à `true`.
 
@@ -195,7 +206,13 @@ Un filtre peut également être appliquer sur le nom de fichier : `filter`.
 
 Seules les clés `message` et `regex` sont obligatoires.
 
+Pour plus d'information sur la mise en place de ce module vous pouvez [consulter sa documentation](https://github.com/mbrehin/git-precommit-checks/blob/master/README_fr.md).
+
 ##### Optimisations
+
+On a un peut triché ici car on a directement injecté les fichiers dans un répertoire `git-hooks` à la racine du projet. Peut-être changerons-nous cela prochainement pour rendre ces compléments génériques et installables.
+
+NB : si vous souhaitez les réutiliser, notez que ces derniers doivent être exécutables (`chmod +x git-hooks/**/*.js`).
 
 Le script `pre-commit/optimize-svg.js` utilise [svgo](https://github.com/svg/svgo) pour optimiser les SVG au moment du commit.
 
@@ -256,7 +273,7 @@ On le configure alors pour lancer nos scripts de hooks ainsi que _commit-lint_ e
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $GIT_PARAMS",
-      "pre-commit": "./git-hooks/pre-commit/check-staged-contents.js && ./git-hooks/pre-commit/optimize-svg.js && precise-commits",
+      "pre-commit": "git-precommit-checks && ./git-hooks/pre-commit/optimize-svg.js && precise-commits",
       "pre-push": "./git-hooks/pre-push.js"
     }
   },
